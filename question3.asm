@@ -1,37 +1,32 @@
-section
- .data
-    ; Change this value to test another number
+section .data
+    ; Change this number to test odd and even values
     number dd 7
-    divisor dd 2
-
-    oddMessage db "odd number", 10
-    oddLength  equ $ - oddMessage
 
     evenMessage db "even number", 10
-    evenLength  equ $ - evenMessage
+    evenLength equ $ - evenMessage
+
+    oddMessage db "odd number", 10
+    oddLength equ $ - oddMessage
 
 section .text
     global _start
 
 _start:
-    ; Place the number in EAX
+    ; Load the number
     mov eax, [number]
 
     ; Clear EDX before division
-    mov edx, 0
+    xor edx, edx
 
     ; Divide the number by 2
-    ; EDX will contain the remainder
-    div dword [divisor]
+    mov ebx, 2
+    div ebx
 
-    ; Compare the remainder with zero
+    ; A remainder of zero means even
     cmp edx, 0
-
-    ; Jump when the remainder is zero
     je even_number
 
 odd_number:
-    ; Display "odd number"
     mov eax, 4
     mov ebx, 1
     mov ecx, oddMessage
@@ -41,7 +36,6 @@ odd_number:
     jmp exit_program
 
 even_number:
-    ; Display "even number"
     mov eax, 4
     mov ebx, 1
     mov ecx, evenMessage
@@ -49,8 +43,6 @@ even_number:
     int 0x80
 
 exit_program:
-    ; Exit the program
     mov eax, 1
-    mov ebx, 0
+    xor ebx, ebx
     int 0x80
-
